@@ -19,9 +19,12 @@ export default function RootLayout({
             <a href="/" className="nav-logo">AIU Attendance Checker</a>
           </div>
         </nav>
-        <main>
+        <main style={{ flex: 1, display: "flex", flexDirection: "column" }}>
           {children}
         </main>
+        <footer style={{ color: "#ffffff", zIndex: 9999, width: "100%", textAlign: "center", padding: "1.5rem", opacity: 0.8, fontSize: "1rem", letterSpacing: "1px", position: "fixed", bottom: 0, pointerEvents: "none" }}>
+          Designed by YOUSEF MAHER
+        </footer>
       </body>
     </html>
   );
