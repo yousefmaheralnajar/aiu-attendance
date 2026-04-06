@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Lecturer {
+  id           String @id @default(cuid())
+  username     String @unique
+  passwordHash String
+}
+
+model Course {
+  id       String @id @default(cuid())
+  name     String
+  code     String @unique
+  sessions AttendanceSession[]
+  students Student[]
+}
+
+model Student {
+  id         String             @id @default(cuid())
+  studentId  String             @unique
+  name       String
+  courseId   String
+  course     Course             @relation(fields: [courseId], references: [id])
+  Attendance AttendanceRecord[]
+}
+
+model AttendanceSession {
+  id           String             @id @default(cuid())
+  courseId     String
+  course       Course             @relation(fields: [courseId], references: [id])
+  date           DateTime           @default(now())
+  expiresAt      DateTime?
+  oneTimeCode    String             @unique
+  isActive       Boolean            @default(true)
+  geofenceEnabled Boolean           @default(false)
+  latitude       Float?
+  longitude      Float?
+  records        AttendanceRecord[]
+}
+
+model AttendanceRecord {
+  id           String            @id @default(cuid())
+  sessionId    String
+  session      AttendanceSession @relation(fields: [sessionId], references: [id])
+  studentId    String?
+  student      Student?          @relation(fields: [studentId], references: [id])
+  name         String
+  idNumber     String
+  timestamp    DateTime          @default(now())
+  isRegistered Boolean           @default(true)
+}
